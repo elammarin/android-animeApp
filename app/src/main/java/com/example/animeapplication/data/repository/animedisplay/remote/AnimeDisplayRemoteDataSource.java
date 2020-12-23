@@ -17,7 +17,7 @@ public class AnimeDisplayRemoteDataSource {
         return animeDisplayService.searchAnime(keywords);
     }
 
-    public Single<Anime> getAnime(String animeId) {
+    /*public Single<Anime> getAnime(String animeId) {
         return animeDisplayService.getAnime(animeId);
-    }
+    }*/
 }

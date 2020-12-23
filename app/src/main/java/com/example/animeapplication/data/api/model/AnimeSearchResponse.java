@@ -6,17 +6,11 @@ import java.util.List;
 
 public class AnimeSearchResponse {
 
-    @SerializedName("items")
+    @SerializedName("results")
     List<Anime> animeList;
 
-    int totalItems;
-
-    public List<Anime> getBookList() {
+    public List<Anime> getAnimeList() {
         return animeList;
-    }
-
-    public int getTotalItems() {
-        return totalItems;
     }
 
 }

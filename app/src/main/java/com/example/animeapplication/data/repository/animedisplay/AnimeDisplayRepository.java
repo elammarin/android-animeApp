@@ -6,5 +6,5 @@ import io.reactivex.Single;
 
 public interface AnimeDisplayRepository {
 
-    Single<AnimeSearchResponse> getBookSearchResponse(String keywords);
+    Single<AnimeSearchResponse> getAnimeSearchResponse(String keywords);
 }
