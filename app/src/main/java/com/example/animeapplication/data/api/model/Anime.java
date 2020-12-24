@@ -54,4 +54,12 @@ public class Anime {
     public boolean isFavorite() {
         return isFavorite;
     }
+
+    public String getStart_date() {
+        return start_date;
+    }
+
+    public String getEnd_date() {
+        return end_date;
+    }
 }

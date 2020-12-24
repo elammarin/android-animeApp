@@ -2,17 +2,24 @@ package com.example.animeapplication.presentation.animedisplay.search.adapter;
 
 import com.google.gson.annotations.SerializedName;
 
-public class AnimeItemViewModel {
+import java.io.Serializable;
+
+public class AnimeItemViewModel implements Serializable {
     private String animeId;
 
     private String iconUrl;
 
-
     private boolean isFavorite;
+
+    private String launchingDate;
+
+    private String EndingDate;
 
     private String title;
 
     private int nbEpisodes;
+
+    private String synopsis;
 
     public String getAnimeId() {
         return animeId;
@@ -52,5 +59,29 @@ public class AnimeItemViewModel {
 
     public void setNbEpisodes(int nbEpisodes) {
         this.nbEpisodes = nbEpisodes;
+    }
+
+    public String getSynopsis() {
+        return synopsis;
+    }
+
+    public void setSynopsis(String synopsis) {
+        this.synopsis = synopsis;
+    }
+
+    public String getLaunchingDate() {
+        return launchingDate;
+    }
+
+    public void setLaunchingDate(String launchingDate) {
+        this.launchingDate = launchingDate;
+    }
+
+    public String getEndingDate() {
+        return EndingDate;
+    }
+
+    public void setEndingDate(String endingDate) {
+        EndingDate = endingDate;
     }
 }

@@ -2,10 +2,12 @@ package com.example.animeapplication.presentation.animedisplay.search.fragment;
 
 import com.example.animeapplication.R;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
@@ -14,10 +16,12 @@ import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.animeapplication.data.di.MockDependencyInjection;
+import com.example.animeapplication.presentation.animedisplay.search.SelectedAnimeActivity;
 import com.example.animeapplication.presentation.animedisplay.search.adapter.AnimeActionInterface;
 import com.example.animeapplication.presentation.animedisplay.search.adapter.AnimeAdapter;
 import com.example.animeapplication.presentation.animedisplay.search.adapter.AnimeItemViewModel;
@@ -27,7 +31,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class SearchFragment extends Fragment implements AnimeActionInterface {
+public class SearchFragment extends Fragment implements AnimeActionInterface, AnimeAdapter.SelectedAnime {
     public static final String TAB_NAME = "Search";
     private View rootView;
     private SearchView searchView;
@@ -35,6 +39,7 @@ public class SearchFragment extends Fragment implements AnimeActionInterface {
     private AnimeAdapter animeAdapter;
     private ProgressBar progressBar;
     private AnimeSearchViewModel animeSearchViewModel;
+    public int position = 0;
 
     private SearchFragment() {
     }
@@ -57,8 +62,20 @@ public class SearchFragment extends Fragment implements AnimeActionInterface {
         setupSearchView();
         setupRecyclerView();
         progressBar = rootView.findViewById(R.id.progress_bar);
-
         registerViewModels();
+        Button b = rootView.findViewById(R.id.button);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (position ==0){
+                    recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+                    position=1;
+                }
+                else{
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                    position=0;
+                }}
+        });
     }
 
     private void registerViewModels() {
@@ -118,9 +135,14 @@ public class SearchFragment extends Fragment implements AnimeActionInterface {
 
     private void setupRecyclerView() {
         recyclerView = rootView.findViewById(R.id.recycler_view);
-        animeAdapter = new AnimeAdapter(this);
+        animeAdapter = new AnimeAdapter(this, this);
         recyclerView.setAdapter(animeAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+    }
+
+    @Override
+    public void selectedAnime(AnimeItemViewModel animeItemViewModel) {
+        startActivity(new Intent(getActivity(), SelectedAnimeActivity.class).putExtra("data", animeItemViewModel));
     }
 
     @Override

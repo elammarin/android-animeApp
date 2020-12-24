@@ -14,6 +14,9 @@ public class AnimeToViewModelMapper {
         AnimeItemViewModel animeItemViewModel = new AnimeItemViewModel();
         animeItemViewModel.setTitle(anime.getTitle());
         animeItemViewModel.setAnimeId(anime.getId());
+        animeItemViewModel.setSynopsis(anime.getDescription());
+        animeItemViewModel.setLaunchingDate(anime.getStart_date());
+        animeItemViewModel.setEndingDate(anime.getEnd_date());
         if (anime.getImage_url() != null) {
             animeItemViewModel.setIconUrl(anime.getImage_url());
         }

@@ -1,6 +1,8 @@
 package com.example.animeapplication.presentation.animedisplay.search.adapter;
 
 import com.example.animeapplication.R;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,16 +22,20 @@ import java.util.List;
 public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHolder> {
 
 
-    public static class AnimeViewHolder extends RecyclerView.ViewHolder {
+
+    public class AnimeViewHolder extends RecyclerView.ViewHolder {
         private TextView titleTextView;
         private TextView nbEpisodesTextView;
         private ImageView iconImageView;
         private View v;
         private AnimeItemViewModel animeItemViewModel;
         private AnimeActionInterface animeActionInterface;
-      //  private Switch favoriteSwitch;
+        private Switch favoriteSwitch;
+        private SelectedAnime selectedAnime;
 
-        public AnimeViewHolder(View v, final AnimeActionInterface animeActionInterface) {
+
+
+        public AnimeViewHolder(View v, final AnimeActionInterface animeActionInterface, final SelectedAnime selectedAnime) {
             super(v);
             this.v = v;
             titleTextView = v.findViewById(R.id.anime_title_textview);
@@ -37,11 +43,23 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
             iconImageView = v.findViewById(R.id.anime_icon_imageview);
             /*favoriteSwitch = v.findViewById(R.id.favorite_switch);*/
             this.animeActionInterface = animeActionInterface;
-            /*setupListeners();*/
+            this.selectedAnime = selectedAnime;
+            //setupListeners();
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.v("ici le id : ", animeItemViewModel.getSynopsis());
+                    selectedAnime.selectedAnime(animeItemViewModel);
+                }
+            });
+
+
         }
 
-       /* private void setupListeners() {
-            favoriteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+
+       /*private void setupListeners() {
+           /* favoriteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     animeActionInterface.onFavoriteToggle(animeItemViewModel.getAnimeId(), b);
@@ -60,18 +78,20 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .circleCrop()
                     .into(iconImageView);
-
         }
+
 
     }
 
-    private List<AnimeItemViewModel> animeItemViewModelList;
+    public List<AnimeItemViewModel> animeItemViewModelList;
     private AnimeActionInterface animeActionInterface;
+    private SelectedAnime selectedAnime;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public AnimeAdapter(AnimeActionInterface animeActionInterface) {
+    public AnimeAdapter(AnimeActionInterface animeActionInterface, SelectedAnime selectedAnime) {
         animeItemViewModelList = new ArrayList<>();
         this.animeActionInterface = animeActionInterface;
+        this.selectedAnime = selectedAnime;
     }
 
     public void bindViewModels(List<AnimeItemViewModel> animeItemViewModelList) {
@@ -87,7 +107,7 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_anime, parent, false);
-        AnimeViewHolder animeViewHolder = new AnimeViewHolder(v, animeActionInterface);
+        AnimeViewHolder animeViewHolder = new AnimeViewHolder(v, animeActionInterface, selectedAnime);
         return animeViewHolder;
     }
 
@@ -104,5 +124,8 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
         return animeItemViewModelList.size();
     }
 
-
+    public interface SelectedAnime{
+        void selectedAnime(AnimeItemViewModel animeItemViewModel);
+    }
 }
+
