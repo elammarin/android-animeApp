@@ -1,8 +1,13 @@
 package com.example.animeapplication.data.api.model;
 
+import android.util.Log;
+
 import com.google.gson.annotations.SerializedName;
 
-public class Anime {
+import java.util.List;
+import java.util.Map;
+
+public class AnimeFavorite {
 
     @SerializedName("mal_id")
     private String id;
@@ -19,15 +24,12 @@ public class Anime {
     @SerializedName("episodes")
     private int episodes;
 
-    @SerializedName("start_date")
-    private String start_date;
+    @SerializedName("aired")
+    private Map<String, String> aired;
 
-    @SerializedName("end_date")
-    private String end_date;
-
-    private boolean isFavorite;
 
     public String getTitle() {
+        Log.v("marche", title);
         return title;
     }
 
@@ -39,26 +41,11 @@ public class Anime {
         return synopsis;
     }
 
-    public int nbEpisodes() {
-        return episodes;
+    public Map<String, String> getAired() {
+        return aired;
     }
+
     public String getId() {
         return id;
-    }
-
-    public void setFavorite() {
-        isFavorite = true;
-    }
-
-    public boolean isFavorite() {
-        return isFavorite;
-    }
-
-    public String getStart_date() {
-        return start_date;
-    }
-
-    public String getEnd_date() {
-        return end_date;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.animeapplication.data.api;
 
+//import com.example.animeapplication.data.api.model.AnimeFavorite;
 import com.example.animeapplication.data.api.model.AnimeSearchResponse;
 import com.example.animeapplication.data.api.model.Anime;
 
@@ -13,8 +14,8 @@ public interface AnimeDisplayService {
     @GET("search/anime")
     Single<AnimeSearchResponse> searchAnime (@Query("q") String keywords);
 
-   /* @GET("anime/{animeId}")
-    Single<Anime> getAnime(@Path("animeId") String animeId);*/
+    @GET("anime/{animeId}")
+    Single<Anime> getAnime(@Path("animeId") String animeId);
 }
 
 

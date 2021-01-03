@@ -2,9 +2,14 @@ package com.example.animeapplication.data.di;
 
 import android.content.Context;
 
+import androidx.room.Room;
+
 import com.example.animeapplication.data.api.AnimeDisplayService;
+import com.example.animeapplication.data.db.AnimeDatabase;
 import com.example.animeapplication.data.repository.animedisplay.AnimeDisplayDataRepository;
 import com.example.animeapplication.data.repository.animedisplay.AnimeDisplayRepository;
+import com.example.animeapplication.data.repository.animedisplay.local.AnimeDisplayLocalDataSource;
+import com.example.animeapplication.data.repository.animedisplay.mapper.AnimeToAnimeEntityMapper;
 import com.example.animeapplication.data.repository.animedisplay.remote.AnimeDisplayRemoteDataSource;
 import com.example.animeapplication.presentation.viewmodel.ViewModelFactory;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
@@ -23,6 +28,8 @@ public class MockDependencyInjection {
     private static AnimeDisplayRepository animeDisplayRepository;
     private static Context applicationContext;
     private static ViewModelFactory viewModelFactory;
+    private static AnimeDatabase animeDatabase;
+
 
     public static ViewModelFactory getViewModelFactory() {
         if (viewModelFactory == null) {
@@ -35,7 +42,9 @@ public class MockDependencyInjection {
     public static AnimeDisplayRepository getAnimeDisplayRepository() {
         if (animeDisplayRepository == null) {
             animeDisplayRepository = new AnimeDisplayDataRepository(
-                    new AnimeDisplayRemoteDataSource(getAnimeDisplayService()));
+                    new AnimeDisplayLocalDataSource(getAnimeDatabase()),
+                    new AnimeDisplayRemoteDataSource(getAnimeDisplayService()),
+                    new AnimeToAnimeEntityMapper());
         }
         return animeDisplayRepository;
     }
@@ -75,5 +84,13 @@ public class MockDependencyInjection {
 
     public static void setContext(Context context) {
         applicationContext = context;
+    }
+
+    public static AnimeDatabase getAnimeDatabase() {
+        if (animeDatabase == null) {
+            animeDatabase = Room.databaseBuilder(applicationContext,
+                    AnimeDatabase.class, "book-database").build();
+        }
+        return animeDatabase;
     }
 }

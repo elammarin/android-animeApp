@@ -17,6 +17,9 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         if (modelClass.isAssignableFrom(AnimeSearchViewModel.class)) {
             return (T) new AnimeSearchViewModel(animeDisplayRepository);
         }
+        if (modelClass.isAssignableFrom(AnimeFavoriteViewModel.class)) {
+            return (T) new AnimeFavoriteViewModel(animeDisplayRepository);
+        }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }
 }

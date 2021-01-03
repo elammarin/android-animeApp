@@ -4,6 +4,7 @@ import io.reactivex.Single;
 import com.example.animeapplication.AnimeApplication;
 import com.example.animeapplication.data.api.AnimeDisplayService;
 import com.example.animeapplication.data.api.model.Anime;
+import com.example.animeapplication.data.api.model.AnimeFavorite;
 import com.example.animeapplication.data.api.model.AnimeSearchResponse;
 
 public class AnimeDisplayRemoteDataSource {
@@ -17,7 +18,7 @@ public class AnimeDisplayRemoteDataSource {
         return animeDisplayService.searchAnime(keywords);
     }
 
-    /*public Single<Anime> getAnime(String animeId) {
+    public Single<Anime> getAnime(String animeId) {
         return animeDisplayService.getAnime(animeId);
-    }*/
+    }
 }

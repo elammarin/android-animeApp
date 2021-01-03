@@ -1,8 +1,5 @@
-package com.example.animeapplication.presentation.animedisplay.search.adapter;
+package com.example.animeapplication.presentation.animedisplay.favorite.adapter;
 
-import com.example.animeapplication.R;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,54 +12,48 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.example.animeapplication.R;
+import com.example.animeapplication.presentation.animedisplay.search.adapter.AnimeItemViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHolder> {
+public class AnimeDetailAdapter extends RecyclerView.Adapter<AnimeDetailAdapter.AnimeDetailViewHolder> {
 
 
-
-    public class AnimeViewHolder extends RecyclerView.ViewHolder {
+    public static class AnimeDetailViewHolder extends RecyclerView.ViewHolder {
         private TextView titleTextView;
+        private TextView endingTextView;
         private TextView nbEpisodesTextView;
+        private TextView descriptionTextView;
+        private TextView launchingTextView;
         private ImageView iconImageView;
         private View v;
         private AnimeItemViewModel animeItemViewModel;
-        private AnimeActionInterface animeActionInterface;
+        private AnimeDetailActionInterface animeDetailActionInterface;
         private Switch favoriteSwitch;
-        private SelectedAnime selectedAnime;
 
-
-
-        public AnimeViewHolder(View v, final AnimeActionInterface animeActionInterface, final SelectedAnime selectedAnime) {
+        public AnimeDetailViewHolder(View v, final AnimeDetailActionInterface animeDetailActionInterface) {
             super(v);
             this.v = v;
             titleTextView = v.findViewById(R.id.anime_title_textview);
             nbEpisodesTextView = v.findViewById(R.id.anime_nb_episodes_textview);
+            descriptionTextView = v.findViewById(R.id.synopsis);
+            launchingTextView = v.findViewById(R.id.launching_date);
+            endingTextView = v.findViewById(R.id.ending_date);
             iconImageView = v.findViewById(R.id.anime_icon_imageview);
             favoriteSwitch = v.findViewById(R.id.favorite_switch);
-            this.animeActionInterface = animeActionInterface;
-            this.selectedAnime = selectedAnime;
             setupListeners();
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.v("ici le id : ", animeItemViewModel.getSynopsis());
-                    selectedAnime.selectedAnime(animeItemViewModel);
-                }
-            });
-
-
+            this.animeDetailActionInterface = animeDetailActionInterface;
         }
 
-
-
-       private void setupListeners() {
+        private void setupListeners() {
             favoriteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    animeActionInterface.onFavoriteToggle(animeItemViewModel.getAnimeId(), b);
+                    if (!b) {
+                        animeDetailActionInterface.onRemoveFavorite(animeItemViewModel.getAnimeId());
+                    }
                 }
             });
         }
@@ -70,28 +61,27 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
         void bind(AnimeItemViewModel animeItemViewModel) {
             this.animeItemViewModel = animeItemViewModel;
             titleTextView.setText(animeItemViewModel.getTitle());
-            nbEpisodesTextView.setText("Nombre d'épisode(s) : "+String.valueOf(animeItemViewModel.getNbEpisodes()));
-            favoriteSwitch.setChecked(animeItemViewModel.isFavorite());
+            endingTextView.setText(animeItemViewModel.getEndingDate());
+            //nbEpisodesTextView.setText(animeItemViewModel.getNbEpisodes());
+            descriptionTextView.setText(animeItemViewModel.getSynopsis());
+            favoriteSwitch.setChecked(true);
+            launchingTextView.setText(animeItemViewModel.getLaunchingDate());
             Glide.with(v)
                     .load(animeItemViewModel.getIconUrl())
                     .centerCrop()
                     .transition(DrawableTransitionOptions.withCrossFade())
-                    .circleCrop()
                     .into(iconImageView);
         }
 
-
     }
 
-    public List<AnimeItemViewModel> animeItemViewModelList;
-    private AnimeActionInterface animeActionInterface;
-    private SelectedAnime selectedAnime;
+    private List<AnimeItemViewModel> animeItemViewModelList;
+    private AnimeDetailActionInterface animeDetailActionInterface;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public AnimeAdapter(AnimeActionInterface animeActionInterface, SelectedAnime selectedAnime) {
+    public AnimeDetailAdapter(AnimeDetailActionInterface animeDetailActionInterface) {
         animeItemViewModelList = new ArrayList<>();
-        this.animeActionInterface = animeActionInterface;
-        this.selectedAnime = selectedAnime;
+        this.animeDetailActionInterface = animeDetailActionInterface;
     }
 
     public void bindViewModels(List<AnimeItemViewModel> animeItemViewModelList) {
@@ -102,21 +92,20 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
 
     // Create new views (invoked by the layout manager)
     @Override
-    public AnimeViewHolder onCreateViewHolder(ViewGroup parent,
-                                             int viewType) {
+    public AnimeDetailViewHolder onCreateViewHolder(ViewGroup parent,
+                                                   int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_anime, parent, false);
-        AnimeViewHolder animeViewHolder = new AnimeViewHolder(v, animeActionInterface, selectedAnime);
-        return animeViewHolder;
+                .inflate(R.layout.item_detailed_anime, parent, false);
+        AnimeDetailViewHolder animeDetailViewHolder = new AnimeDetailViewHolder(v, animeDetailActionInterface);
+        return animeDetailViewHolder;
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(AnimeViewHolder holder, int position) {
+    public void onBindViewHolder(AnimeDetailViewHolder holder, int position) {
         holder.bind(animeItemViewModelList.get(position));
     }
-
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
@@ -124,8 +113,4 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
         return animeItemViewModelList.size();
     }
 
-    public interface SelectedAnime{
-        void selectedAnime(AnimeItemViewModel animeItemViewModel);
-    }
 }
-

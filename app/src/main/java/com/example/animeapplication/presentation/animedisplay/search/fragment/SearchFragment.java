@@ -25,7 +25,9 @@ import com.example.animeapplication.presentation.animedisplay.search.SelectedAni
 import com.example.animeapplication.presentation.animedisplay.search.adapter.AnimeActionInterface;
 import com.example.animeapplication.presentation.animedisplay.search.adapter.AnimeAdapter;
 import com.example.animeapplication.presentation.animedisplay.search.adapter.AnimeItemViewModel;
+import com.example.animeapplication.presentation.viewmodel.AnimeFavoriteViewModel;
 import com.example.animeapplication.presentation.viewmodel.AnimeSearchViewModel;
+
 
 import java.util.List;
 import java.util.Timer;
@@ -39,6 +41,7 @@ public class SearchFragment extends Fragment implements AnimeActionInterface, An
     private AnimeAdapter animeAdapter;
     private ProgressBar progressBar;
     private AnimeSearchViewModel animeSearchViewModel;
+    private AnimeFavoriteViewModel animeFavoriteViewModel;
     public int position = 0;
 
     private SearchFragment() {
@@ -80,6 +83,7 @@ public class SearchFragment extends Fragment implements AnimeActionInterface, An
 
     private void registerViewModels() {
         animeSearchViewModel = new ViewModelProvider(requireActivity(), MockDependencyInjection.getViewModelFactory()).get(AnimeSearchViewModel.class);
+        animeFavoriteViewModel = new ViewModelProvider(requireActivity(), MockDependencyInjection.getViewModelFactory()).get(AnimeFavoriteViewModel.class);
 
 
         animeSearchViewModel.getAnimes().observe(getViewLifecycleOwner(), new Observer<List<AnimeItemViewModel>>() {
@@ -146,7 +150,11 @@ public class SearchFragment extends Fragment implements AnimeActionInterface, An
     }
 
     @Override
-    public void onFavoriteToggle(String bookId, boolean isFavorite) {
-        System.out.println("do nothing for now!");
+    public void onFavoriteToggle(String animeId, boolean isFavorite) {
+        if (isFavorite) {
+            animeFavoriteViewModel.addAnimeToFavorite(animeId);
+        } else {
+            animeFavoriteViewModel.removeAnimeFromFavorites(animeId);
+        }
     }
 }
