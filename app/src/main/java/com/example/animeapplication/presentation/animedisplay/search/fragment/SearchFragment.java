@@ -33,6 +33,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * le fragment dédié à la recherche
+ */
 public class SearchFragment extends Fragment implements AnimeActionInterface, AnimeAdapter.SelectedAnime {
     public static final String TAB_NAME = "Search";
     private View rootView;
@@ -44,13 +47,27 @@ public class SearchFragment extends Fragment implements AnimeActionInterface, An
     private AnimeFavoriteViewModel animeFavoriteViewModel;
     public int position = 0;
 
+    /**
+     * Constructeur de SearchFragment
+     */
     private SearchFragment() {
     }
 
+    /**
+     * créer une nouvelle instance de SearchFragment
+     * @return un SearchFragment
+     */
     public static SearchFragment newInstance() {
         return new SearchFragment();
     }
 
+    /**
+     * Création de la vue
+     * @param inflater un inflater
+     * @param container un container
+     * @param savedInstanceState savedInstanceState
+     * @return une vue
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -59,6 +76,10 @@ public class SearchFragment extends Fragment implements AnimeActionInterface, An
         return rootView;
     }
 
+    /**
+     * Actions lorsque l'activité est créée
+     * @param savedInstanceState savedInstanceState
+     */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -81,6 +102,9 @@ public class SearchFragment extends Fragment implements AnimeActionInterface, An
         });
     }
 
+    /**
+     * inscription des viewModels
+     */
     private void registerViewModels() {
         animeSearchViewModel = new ViewModelProvider(requireActivity(), MockDependencyInjection.getViewModelFactory()).get(AnimeSearchViewModel.class);
         animeFavoriteViewModel = new ViewModelProvider(requireActivity(), MockDependencyInjection.getViewModelFactory()).get(AnimeFavoriteViewModel.class);
@@ -101,16 +125,29 @@ public class SearchFragment extends Fragment implements AnimeActionInterface, An
         });
     }
 
+    /**
+     * mise en place de la SearchView
+     */
     private void setupSearchView() {
         searchView = rootView.findViewById(R.id.search_view);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             private Timer timer = new Timer();
 
+            /**
+             * action lors de la soumission du texte
+             * @param query le texte rentré par l'utilisateur dans le champs qui sert à rechercher un animé
+             * @return un booléen
+             */
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
             }
 
+            /**
+             * action lorsque le texte du champs dédié à la recherche change
+             * @param s le texte dans le champs dédié à la recherche
+             * @return un booléen
+             */
             @Override
             public boolean onQueryTextChange(final String s) {
                 if (s.length() == 0) {
@@ -137,6 +174,9 @@ public class SearchFragment extends Fragment implements AnimeActionInterface, An
         });
     }
 
+    /**
+     * mise en place du recyclerview
+     */
     private void setupRecyclerView() {
         recyclerView = rootView.findViewById(R.id.recycler_view);
         animeAdapter = new AnimeAdapter(this, this);
@@ -144,11 +184,20 @@ public class SearchFragment extends Fragment implements AnimeActionInterface, An
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
+    /**
+     * une nouvelle activité est lancé pour affiché les informations détaillé d'un animé choisi par l'utilisateur
+     * @param animeItemViewModel ViewModel d'un animé
+     */
     @Override
     public void selectedAnime(AnimeItemViewModel animeItemViewModel) {
         startActivity(new Intent(getActivity(), SelectedAnimeActivity.class).putExtra("data", animeItemViewModel));
     }
 
+    /**
+     * Ajout ou suppression d'un animé des favoris selon la position du switch avant l'appui sur celui-ci de l"utilisateur
+     * @param animeId
+     * @param isFavorite
+     */
     @Override
     public void onFavoriteToggle(String animeId, boolean isFavorite) {
         if (isFavorite) {

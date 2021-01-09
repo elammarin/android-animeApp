@@ -19,10 +19,15 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Un adapter pour le fragment dédié à la recherche
+ */
 public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHolder> {
 
 
-
+    /**
+     * un ViewHolder pour Anime
+     */
     public class AnimeViewHolder extends RecyclerView.ViewHolder {
         private TextView titleTextView;
         private TextView nbEpisodesTextView;
@@ -34,7 +39,12 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
         private SelectedAnime selectedAnime;
 
 
-
+        /**
+         * Constructeur du viewHolder
+         * @param v la vue
+         * @param animeActionInterface l'interface pour les actions à effectuer
+         * @param selectedAnime l'animé selectionné
+         */
         public AnimeViewHolder(View v, final AnimeActionInterface animeActionInterface, final SelectedAnime selectedAnime) {
             super(v);
             this.v = v;
@@ -56,9 +66,10 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
 
         }
 
-
-
-       private void setupListeners() {
+        /**
+         * mise en place des listeners
+         */
+        private void setupListeners() {
             favoriteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -67,6 +78,10 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
             });
         }
 
+        /**
+         * defini les champs de texte et les images sur l'écran
+         * @param animeItemViewModel le viewModel d'un animé
+         */
         void bind(AnimeItemViewModel animeItemViewModel) {
             this.animeItemViewModel = animeItemViewModel;
             titleTextView.setText(animeItemViewModel.getTitle());
@@ -88,12 +103,22 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
     private SelectedAnime selectedAnime;
 
     // Provide a suitable constructor (depends on the kind of dataset)
+
+    /**
+     *
+     * @param animeActionInterface Interface pour pouvoir ajouter ou supprimer des favoris un animé
+     * @param selectedAnime Interface pour pouvoir lancer l'activité de l'animé selectionné
+     */
     public AnimeAdapter(AnimeActionInterface animeActionInterface, SelectedAnime selectedAnime) {
         animeItemViewModelList = new ArrayList<>();
         this.animeActionInterface = animeActionInterface;
         this.selectedAnime = selectedAnime;
     }
 
+    /**
+     * Ajoute tout les animesItemiewModel afin de pouvoir ensuite les afficher proprement à l'écran
+     * @param animeItemViewModelList
+     */
     public void bindViewModels(List<AnimeItemViewModel> animeItemViewModelList) {
         this.animeItemViewModelList.clear();
         this.animeItemViewModelList.addAll(animeItemViewModelList);
@@ -101,6 +126,13 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
     }
 
     // Create new views (invoked by the layout manager)
+
+    /**
+     *
+     * @param parent la vue contenant les differentes vues
+     * @param viewType soit un linearLayout ou soit un gridLayout
+     * @return un AnimeViewHolder
+     */
     @Override
     public AnimeViewHolder onCreateViewHolder(ViewGroup parent,
                                              int viewType) {
@@ -112,6 +144,12 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
     }
 
     // Replace the contents of a view (invoked by the layout manager)
+
+    /**
+     *
+     * @param holder AnimeViewHolder
+     * @param position la position de l'animé
+     */
     @Override
     public void onBindViewHolder(AnimeViewHolder holder, int position) {
         holder.bind(animeItemViewModelList.get(position));
@@ -120,10 +158,16 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
+    /**
+     * le nombre d'animé à afficher
+     */
     public int getItemCount() {
         return animeItemViewModelList.size();
     }
 
+    /**
+     * l'interface permettant d'obtenir l'animé choisi par l'utilisateur
+     */
     public interface SelectedAnime{
         void selectedAnime(AnimeItemViewModel animeItemViewModel);
     }

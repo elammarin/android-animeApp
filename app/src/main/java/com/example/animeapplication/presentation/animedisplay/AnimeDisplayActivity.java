@@ -19,6 +19,10 @@ public class AnimeDisplayActivity extends AppCompatActivity {
     private ViewPager2 viewPager;
     private TabLayout tabLayout;
 
+    /**
+     * Lors de la création de l"activité
+     * @param savedInstanceState l'étât sauvegarder de l'instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +30,9 @@ public class AnimeDisplayActivity extends AppCompatActivity {
         setupViewPagerAndTabs();
     }
 
+    /**
+     * mets en place le viewpager et le tablayout
+     */
     private void setupViewPagerAndTabs() {
         viewPager = findViewById(R.id.tab_viewpager);
         tabLayout = findViewById(R.id.tablayout);
@@ -35,6 +42,11 @@ public class AnimeDisplayActivity extends AppCompatActivity {
 
         viewPager.setAdapter(new FragmentStateAdapter(this) {
 
+            /**
+             *
+             * @param position position du fragment. O pour SearchFragment et 1 pour FavoriteFragment
+             * @return le Fragment à la position donnée
+             */
             @Override
             public Fragment createFragment(int position) {
                 if (position == 0) {
@@ -43,6 +55,9 @@ public class AnimeDisplayActivity extends AppCompatActivity {
                 return fragmentTwo;
             }
 
+            /**
+             * Non utilisé
+             */
             public CharSequence getPageTitle(int position) {
                 if (position == 0) {
                     return SearchFragment.TAB_NAME;
@@ -50,12 +65,21 @@ public class AnimeDisplayActivity extends AppCompatActivity {
                 return FavoriteFragment.TAB_NAME;
             }
 
+            /**
+             *
+             * @return le nombre de fragment
+             */
             @Override
             public int getItemCount() {
                 return 2;
             }
         });
         TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
+            /**
+             *
+             * @param tab le tab du tablayout
+             * @param position position 0 ou 1 selon le fragment
+             */
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                 tab.setText(position == 0 ? SearchFragment.TAB_NAME : FavoriteFragment.TAB_NAME);

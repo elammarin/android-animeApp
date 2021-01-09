@@ -30,7 +30,10 @@ public class MockDependencyInjection {
     private static ViewModelFactory viewModelFactory;
     private static AnimeDatabase animeDatabase;
 
-
+    /**
+     *
+     * @return ViewModelFactory
+     */
     public static ViewModelFactory getViewModelFactory() {
         if (viewModelFactory == null) {
             viewModelFactory = new ViewModelFactory(getAnimeDisplayRepository());
@@ -38,7 +41,10 @@ public class MockDependencyInjection {
         return viewModelFactory;
     }
 
-
+    /**
+     *
+     * @return AnimeDisplayRepository
+     */
     public static AnimeDisplayRepository getAnimeDisplayRepository() {
         if (animeDisplayRepository == null) {
             animeDisplayRepository = new AnimeDisplayDataRepository(
@@ -49,6 +55,10 @@ public class MockDependencyInjection {
         return animeDisplayRepository;
     }
 
+    /**
+     *
+     * @return AnimeDisplayService
+     */
     public static AnimeDisplayService getAnimeDisplayService() {
         if (animeDisplayService == null) {
             animeDisplayService = getRetrofit().create(AnimeDisplayService.class);
@@ -56,6 +66,10 @@ public class MockDependencyInjection {
         return animeDisplayService;
     }
 
+    /**
+     *
+     * @return Retrofit
+     */
     public static Retrofit getRetrofit() {
         if (retrofit == null) {
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -75,6 +89,10 @@ public class MockDependencyInjection {
         return retrofit;
     }
 
+    /**
+     *
+     * @return Gson
+     */
     public static Gson getGson() {
         if (gson == null) {
             gson = new Gson();
